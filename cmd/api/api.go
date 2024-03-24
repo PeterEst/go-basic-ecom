@@ -5,8 +5,8 @@ import (
 	"log"
 	"net/http"
 
-	"com.github.com/peterest/go-basic-ecom/service/user"
 	"github.com/gorilla/mux"
+	"github.com/peterest/go-basic-ecom/service/user"
 )
 
 type ApiServer struct {

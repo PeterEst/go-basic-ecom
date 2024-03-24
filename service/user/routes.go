@@ -1,8 +1,8 @@
 package user
 
 import (
-	"com.github.com/peterest/go-basic-ecom/types"
 	"github.com/gorilla/mux"
+	"github.com/peterest/go-basic-ecom/types"
 )
 
 type Handler struct {

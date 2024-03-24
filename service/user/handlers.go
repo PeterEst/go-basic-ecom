@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"net/http"
 
-	"com.github.com/peterest/go-basic-ecom/types"
-	"com.github.com/peterest/go-basic-ecom/utils"
 	"github.com/go-playground/validator/v10"
+	"github.com/peterest/go-basic-ecom/types"
+	"github.com/peterest/go-basic-ecom/utils"
 )
 
 func (h *Handler) handleLogin(w http.ResponseWriter, r *http.Request) {}

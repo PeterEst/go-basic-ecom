@@ -8,8 +8,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"com.github.com/peterest/go-basic-ecom/types"
 	"github.com/gorilla/mux"
+	"github.com/peterest/go-basic-ecom/types"
 )
 
 type mockUserStore struct{}

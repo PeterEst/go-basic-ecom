@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 
-	"com.github.com/peterest/go-basic-ecom/types"
+	"github.com/peterest/go-basic-ecom/types"
 )
 
 type UserRepository struct {
