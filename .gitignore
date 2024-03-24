@@ -1,0 +1,23 @@
+### Go ###
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+bin
+
+# Test binary, built with `go test -c`
+*.test
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+
+# Go workspace file
+go.work
+
+# Environment variables file
+.env
+
+# VSCode / MacOS
+.DS_Store
+settings.json
