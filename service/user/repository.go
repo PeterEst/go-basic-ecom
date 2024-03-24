@@ -27,8 +27,8 @@ func scanRowIntoUser(rows *sql.Rows) (*types.User, error) {
 	return u, nil
 }
 
-func (s *UserRepository) GetUserByEmail(email string) (*types.User, error) {
-	rows, err := s.db.Query("SELECT * FROM users WHERE email = $1", email)
+func (repo *UserRepository) GetUserByEmail(email string) (*types.User, error) {
+	rows, err := repo.db.Query("SELECT * FROM users WHERE email = ?", email)
 
 	if err != nil {
 		return nil, err
@@ -50,10 +50,41 @@ func (s *UserRepository) GetUserByEmail(email string) (*types.User, error) {
 	return u, nil
 }
 
-func (s *UserRepository) GetUserByID(id int) (*types.User, error) {
-	return nil, nil
+func (repo *UserRepository) GetUserByID(id int) (*types.User, error) {
+	rows, err := repo.db.Query("SELECT * FROM users WHERE id = ?", id)
+
+	if err != nil {
+		return nil, err
+	}
+
+	u := new(types.User)
+	for rows.Next() {
+		u, err = scanRowIntoUser(rows)
+
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	if u.ID == 0 {
+		return nil, fmt.Errorf("user not found")
+	}
+
+	return u, nil
 }
 
-func (s *UserRepository) CreateUser(user types.User) error {
+func (repo *UserRepository) CreateUser(user types.User) error {
+	_, err := repo.db.Exec(
+		"INSERT INTO users (first_name, last_name, email, password) VALUES (?, ?, ?, ?)",
+		user.FirstName,
+		user.LastName,
+		user.Email,
+		user.Password,
+	)
+
+	if err != nil {
+		return err
+	}
+
 	return nil
 }

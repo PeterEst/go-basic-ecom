@@ -15,6 +15,8 @@ type Config struct {
 	DBPassword string
 	DBHost     string
 	DBName     string
+
+	JwtSecret string
 }
 
 var Env = initConfig()
@@ -31,6 +33,8 @@ func initConfig() Config {
 		DBPassword: getEnvVariable("DB_PASSWORD", "password"),
 		DBHost:     fmt.Sprintf("%s:%s", getEnvVariable("DB_HOST", "localhost"), getEnvVariable("DB_PORT", "3306")),
 		DBName:     getEnvVariable("DB_NAME", "go-basic-ecom"),
+
+		JwtSecret: getEnvVariable("JWT_SECRET", "secret"),
 	}
 }
 
