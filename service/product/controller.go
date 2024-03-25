@@ -10,7 +10,7 @@ import (
 	"github.com/peterest/go-basic-ecom/utils"
 )
 
-func (h *Handler) handleGetProducts(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) getProductsController(w http.ResponseWriter, r *http.Request) {
 	products, err := h.repository.GetProducts()
 
 	if err != nil {
@@ -21,7 +21,7 @@ func (h *Handler) handleGetProducts(w http.ResponseWriter, r *http.Request) {
 	utils.WriteJSON(w, http.StatusOK, products)
 }
 
-func (h *Handler) handleCreateProduct(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) createProductController(w http.ResponseWriter, r *http.Request) {
 	var product types.CreateProductPayload
 	if err := utils.ParseJSON(r, &product); err != nil {
 		utils.WriteError(w, http.StatusBadRequest, err)
@@ -42,7 +42,7 @@ func (h *Handler) handleCreateProduct(w http.ResponseWriter, r *http.Request) {
 	utils.WriteJSON(w, http.StatusCreated, createdProduct)
 }
 
-func (h *Handler) handleGetProduct(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) getProductController(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id, ok := vars["id"]
 	if !ok {

@@ -18,7 +18,7 @@ func NewHandler(repository types.ProductRepository) *Handler {
 }
 
 func (h *Handler) RegisterRoutes(router *mux.Router) {
-	router.HandleFunc("/products", h.handleGetProducts).Methods(http.MethodGet)
-	router.HandleFunc("/products", h.handleCreateProduct).Methods(http.MethodPost)
-	router.HandleFunc("/products/{id}", h.handleGetProduct).Methods(http.MethodGet)
+	router.HandleFunc("/products", h.getProductsController).Methods(http.MethodGet)
+	router.HandleFunc("/products", h.createProductController).Methods(http.MethodPost)
+	router.HandleFunc("/products/{id}", h.getProductController).Methods(http.MethodGet)
 }

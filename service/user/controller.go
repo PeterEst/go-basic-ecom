@@ -10,7 +10,7 @@ import (
 	"github.com/peterest/go-basic-ecom/utils"
 )
 
-func (h *Handler) handleLogin(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) loginController(w http.ResponseWriter, r *http.Request) {
 	var credentials types.LoginUserPayload
 	if err := utils.ParseJSON(r, &credentials); err != nil {
 		utils.WriteError(w, http.StatusBadRequest, err)
@@ -46,7 +46,7 @@ func (h *Handler) handleLogin(w http.ResponseWriter, r *http.Request) {
 	utils.WriteJSON(w, http.StatusOK, map[string]string{"token": token})
 }
 
-func (h *Handler) handleRegister(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) registrationController(w http.ResponseWriter, r *http.Request) {
 	var user types.RegisterUserPayload
 	if err := utils.ParseJSON(r, &user); err != nil {
 		utils.WriteError(w, http.StatusBadRequest, err)

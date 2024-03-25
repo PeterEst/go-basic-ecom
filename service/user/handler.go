@@ -18,6 +18,6 @@ func NewHandler(repository types.UserRepository) *Handler {
 }
 
 func (h *Handler) RegisterRoutes(router *mux.Router) {
-	router.HandleFunc("/login", h.handleLogin).Methods(http.MethodPost)
-	router.HandleFunc("/register", h.handleRegister).Methods(http.MethodPost)
+	router.HandleFunc("/login", h.loginController).Methods(http.MethodPost)
+	router.HandleFunc("/register", h.registrationController).Methods(http.MethodPost)
 }
