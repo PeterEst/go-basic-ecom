@@ -24,4 +24,6 @@ type ProductRepository interface {
 	GetProducts() ([]Product, error)
 	CreateProduct(product CreateProductPayload) (*Product, error)
 	GetProductByID(id int) (*Product, error)
+	GetProductsByID(ids []int) ([]Product, error)
+	UpdateProduct(product Product) (*Product, error)
 }

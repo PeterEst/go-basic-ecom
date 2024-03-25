@@ -2,6 +2,8 @@ package product
 
 import (
 	"database/sql"
+	"fmt"
+	"strings"
 
 	"github.com/peterest/go-basic-ecom/types"
 )
@@ -95,4 +97,50 @@ func (repo *ProductRepository) GetProductByID(id int) (*types.Product, error) {
 	}
 
 	return product, nil
+}
+
+func (repo *ProductRepository) GetProductsByID(productIds []int) ([]types.Product, error) {
+	placeholders := strings.Repeat("?,", len(productIds)-1)
+	query := fmt.Sprintf("SELECT * FROM products WHERE id IN (%s?)", placeholders)
+
+	stringIds := make([]interface{}, len(productIds))
+	for i, id := range productIds {
+		stringIds[i] = id
+	}
+
+	rows, err := repo.db.Query(query, stringIds...)
+	if err != nil {
+		return nil, err
+	}
+
+	products := []types.Product{}
+	for rows.Next() {
+		product, err := scanRowsIntoProduct(rows)
+
+		if err != nil {
+			return nil, err
+		}
+
+		products = append(products, *product)
+	}
+
+	return products, nil
+}
+
+func (repo *ProductRepository) UpdateProduct(product types.Product) (*types.Product, error) {
+	_, err := repo.db.Exec(
+		"UPDATE products SET name = ?, description = ?, image = ?, price = ?, quantity = ? WHERE id = ?",
+		product.Name,
+		product.Description,
+		product.Image,
+		product.Price,
+		product.Quantity,
+		product.ID,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return repo.GetProductByID(product.ID)
 }

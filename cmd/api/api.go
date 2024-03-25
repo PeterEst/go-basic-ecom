@@ -6,6 +6,8 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
+	"github.com/peterest/go-basic-ecom/service/cart"
+	"github.com/peterest/go-basic-ecom/service/order"
 	"github.com/peterest/go-basic-ecom/service/product"
 	"github.com/peterest/go-basic-ecom/service/user"
 )
@@ -31,6 +33,10 @@ func (server *ApiServer) Run() error {
 
 	productRepository := product.NewRepository(server.db)
 	product.NewHandler(productRepository).RegisterRoutes(subRouter)
+
+	orderRepository := order.NewRepository(server.db)
+
+	cart.NewHandler(productRepository, orderRepository, userRepository).RegisterRoutes(subRouter)
 
 	log.Println("Starting server on", server.addr)
 

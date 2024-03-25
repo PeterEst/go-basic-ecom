@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/go-playground/validator/v10"
 	"github.com/gorilla/mux"
 	"github.com/peterest/go-basic-ecom/types"
 	"github.com/peterest/go-basic-ecom/utils"
@@ -29,7 +30,8 @@ func (h *Handler) createProductController(w http.ResponseWriter, r *http.Request
 	}
 
 	if err := utils.Validator.Struct(product); err != nil {
-		utils.WriteError(w, http.StatusBadRequest, err)
+		errors := err.(validator.ValidationErrors)
+		utils.WriteError(w, http.StatusBadRequest, errors)
 		return
 	}
 
