@@ -23,7 +23,7 @@ var Env = initConfig()
 
 func initConfig() Config {
 	if err := godotenv.Load(); err != nil {
-		log.Fatal("Error loading .env file")
+		log.Println("Error loading .env file")
 	}
 
 	return Config{
