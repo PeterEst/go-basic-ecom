@@ -4,13 +4,14 @@ import (
 	"net/http"
 
 	"github.com/go-playground/validator/v10"
+	"github.com/peterest/go-basic-ecom/middleware"
 	"github.com/peterest/go-basic-ecom/types"
 	"github.com/peterest/go-basic-ecom/utils"
 )
 
 // TODO: authentication
 func (h *Handler) checkoutController(w http.ResponseWriter, r *http.Request) {
-	userID := 4
+	userID := middleware.GetUserIDFromContext(r.Context())
 
 	var cart types.CheckoutPayload
 	if err := utils.ParseJSON(r, &cart); err != nil {

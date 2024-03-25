@@ -34,7 +34,7 @@ func (h *Handler) loginController(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	tokenClaims := map[string]interface{}{"userId": user.ID}
+	tokenClaims := map[string]interface{}{"userID": user.ID}
 	var expiration time.Duration = time.Second * time.Duration(60*60*24*7) // 1 week
 
 	token, err := utils.GenerateJWT(tokenClaims, expiration)

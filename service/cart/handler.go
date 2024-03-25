@@ -1,7 +1,10 @@
 package cart
 
 import (
+	"net/http"
+
 	"github.com/gorilla/mux"
+	"github.com/peterest/go-basic-ecom/middleware"
 	"github.com/peterest/go-basic-ecom/types"
 )
 
@@ -24,5 +27,5 @@ func NewHandler(
 }
 
 func (h *Handler) RegisterRoutes(router *mux.Router) {
-	router.HandleFunc("/cart/checkout", h.checkoutController).Methods("POST")
+	router.HandleFunc("/cart/checkout", middleware.WithJWTAuth(h.checkoutController, h.userRepository)).Methods(http.MethodPost)
 }
