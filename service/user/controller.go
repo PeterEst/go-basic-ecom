@@ -13,24 +13,24 @@ import (
 func (h *Handler) loginController(w http.ResponseWriter, r *http.Request) {
 	var credentials types.LoginUserPayload
 	if err := utils.ParseJSON(r, &credentials); err != nil {
-		utils.WriteError(w, http.StatusBadRequest, err)
+		utils.HandleFailedAPIResponse(w, http.StatusBadRequest, "failed")
 		return
 	}
 
 	if err := utils.Validator.Struct(credentials); err != nil {
 		errors := err.(validator.ValidationErrors)
-		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("invalid payload: %s", errors))
+		utils.HandleFailedAPIResponse(w, http.StatusBadRequest, fmt.Sprintf("invalid payload: %s", errors))
 		return
 	}
 
 	user, err := h.repository.GetUserByEmail(credentials.Email)
 	if err != nil {
-		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("invalid credentials"))
+		utils.HandleFailedAPIResponse(w, http.StatusBadRequest, "invalid credentials")
 		return
 	}
 
 	if !utils.CompareHash(user.Password, credentials.Password) {
-		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("invalid credentials"))
+		utils.HandleFailedAPIResponse(w, http.StatusBadRequest, "invalid credentials")
 		return
 	}
 
@@ -39,35 +39,35 @@ func (h *Handler) loginController(w http.ResponseWriter, r *http.Request) {
 
 	token, err := utils.GenerateJWT(tokenClaims, expiration)
 	if err != nil {
-		utils.WriteError(w, http.StatusInternalServerError, err)
+		utils.HandleFailedAPIResponse(w, http.StatusInternalServerError, "failed")
 		return
 	}
 
-	utils.WriteJSON(w, http.StatusOK, map[string]string{"token": token})
+	utils.HandleSuccessfulAPIResponse(w, map[string]string{"token": token}, "success", http.StatusOK)
 }
 
 func (h *Handler) registrationController(w http.ResponseWriter, r *http.Request) {
 	var user types.RegisterUserPayload
 	if err := utils.ParseJSON(r, &user); err != nil {
-		utils.WriteError(w, http.StatusBadRequest, err)
+		utils.HandleFailedAPIResponse(w, http.StatusBadRequest, "failed")
 		return
 	}
 
 	if err := utils.Validator.Struct(user); err != nil {
 		errors := err.(validator.ValidationErrors)
-		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("invalid payload: %s", errors))
+		utils.HandleFailedAPIResponse(w, http.StatusBadRequest, fmt.Sprintf("invalid payload: %s", errors))
 		return
 	}
 
 	_, err := h.repository.GetUserByEmail(user.Email)
 	if err == nil {
-		utils.WriteError(w, http.StatusConflict, fmt.Errorf("user with email %s already exists", user.Email))
+		utils.HandleFailedAPIResponse(w, http.StatusConflict, fmt.Sprintf("user with email %s already exists", user.Email))
 		return
 	}
 
 	hashedPassword, err := utils.Hash(user.Password)
 	if err != nil {
-		utils.WriteError(w, http.StatusInternalServerError, err)
+		utils.HandleFailedAPIResponse(w, http.StatusInternalServerError, err.Error())
 		return
 	}
 
@@ -79,9 +79,9 @@ func (h *Handler) registrationController(w http.ResponseWriter, r *http.Request)
 	})
 
 	if err != nil {
-		utils.WriteError(w, http.StatusInternalServerError, err)
+		utils.HandleFailedAPIResponse(w, http.StatusInternalServerError, err.Error())
 		return
 	}
 
-	utils.WriteJSON(w, http.StatusCreated, nil)
+	utils.HandleSuccessfulAPIResponse(w, nil, "success", http.StatusCreated)
 }
